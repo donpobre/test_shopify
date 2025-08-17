@@ -1,0 +1,324 @@
+<!-- /sections/index-blogs.liquid -->
+<div class="{{ section.settings.display }}">
+  <div class="grid-container">
+    <div class="index-blogs-container box border-none">
+      {%- if section.settings.title != blank or section.settings.sub_title != blank -%}
+        <div class="box-divider grid-x">
+          {%- if section.settings.title != blank -%}
+            <h2 class="box-title width-100">{{ section.settings.title }}</h2>
+          {%- endif -%}
+          {%- if section.settings.sub_title != blank -%}
+            <p class="box-sub-title width-100">{{ section.settings.sub_title }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      <div class="box-content">
+        <div class="index-blogs-content grid-x grid-margin-x small-up-{{ section.settings.column_small }} medium-up-{{ section.settings.column_medium }} large-up-{{ section.settings.column_large }} xlarge-up-{{ section.settings.column_xlarge }} xxlarge-up-{{ section.settings.column_xxlarge }} xxxlarge-up-{{ section.settings.column_xxxlarge }}">
+          {% for article in blogs[section.settings.select_blog].articles limit:section.settings.limit %}
+            <div class="cell">
+              <div class="index-blogs-item article-grid">
+                {%- include 'index-article-item' -%}
+              </div>
+            </div>
+          {% else %}
+            {% for i in (1..section.settings.limit) %}
+              <div class="cell">
+                <div class="index-blogs-item article-grid">
+                  <div class="article-item">
+                    <div class="article-item-thumb">
+                      <a href="javascript:void(0);" class="display-block">
+                        <img src="{{ '350x220.png' | asset_url }}" class="article-item-image" alt="{{ article.title }}"/>
+                      </a>
+                    </div>
+                    <div class="article-item-caption">                
+                      <h2 class="article-item-title">
+                        <a href="javascript:void(0);">{{ 'homepage.onboarding.blog_title' |t }}</a>
+                      </h2>
+                      <div class="article-item-info">
+                        {{ 'general.text.by' | t }} <span class="article-item-author">{{ 'homepage.onboarding.blog_author' |t }}</span>, 
+                        <span class="article-item-date">Jun 13, 2018</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "List Blogs",
+  "class": "index-section index-blogs",
+  "settings": [
+    {
+      "type": "select",
+      "id": "display",
+      "label": "Display on",
+      "options": [
+        {
+          "value": "",
+          "label": "Desktop & Mobile"
+        },
+        {
+          "value": "show-for-large",
+          "label": "Desktop only"
+        },
+        {
+          "value": "hide-for-large",
+          "label": "Mobile only"
+        }
+      ],
+      "default": ""
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "html",
+      "id": "sub_title",
+      "label": "Sub Title"
+    },
+    {
+      "type": "blog",
+      "id": "select_blog",
+      "label": "Select blogs"
+    },
+    {
+      "type": "select",
+      "id": "column_small",
+      "label": "Article per row",
+      "info": "For small screen (0px - 550px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "select",
+      "id": "column_medium",
+      "label": "Article per row",
+      "info": "For medium screen (551px - 800px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "column_large",
+      "label": "Article per row",
+      "info": "For large screen (801px - 1260px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        },
+        {
+          "value": "7",
+          "label": "7"
+        },
+        {
+          "value": "8",
+          "label": "8"
+        }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "select",
+      "id": "column_xlarge",
+      "label": "Article per row",
+      "info": "For xlarge screen (1261px - 1440px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        },
+        {
+          "value": "7",
+          "label": "7"
+        },
+        {
+          "value": "8",
+          "label": "8"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "column_xxlarge",
+      "label": "Article per row",
+      "info": "For xxlarge screen (1441px - 1680px)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        },
+        {
+          "value": "7",
+          "label": "7"
+        },
+        {
+          "value": "8",
+          "label": "8"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "column_xxxlarge",
+      "label": "Article per row",
+      "info": "For xxxlarge screen (1681px - infinity)",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        },
+        {
+          "value": "7",
+          "label": "7"
+        },
+        {
+          "value": "8",
+          "label": "8"
+        }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "text",
+      "id": "limit",
+      "label": "Limit article show",
+      "default": "4"
+    }
+  ],
+  "presets": [
+    {
+      "name": "List Blogs",
+      "category": "List Blogs"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,71 @@
+<!-- /sections/index-welcome-message.liquid -->
+<div class="{{ section.settings.display }}">
+  <div class="grid-container">
+    <div class="box border-none">
+      {%- if section.settings.title != blank or section.settings.sub_title != blank -%}
+        <div class="box-divider grid-x">
+          {%- if section.settings.title != blank -%}
+            <h2 class="box-title width-100">{{ section.settings.title }}</h2>
+          {%- endif -%}
+          {%- if section.settings.sub_title != blank -%}
+            <p class="box-sub-title width-100">{{ section.settings.sub_title }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      <div class="box-content">
+        <div class="index-welcome-message-content">
+          {{ section.settings.content }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Welcome Message",
+  "class": "index-welcome-message",
+  "settings": [
+    {
+      "type": "select",
+      "id": "display",
+      "label": "Display on",
+      "options": [
+        {
+          "value": "",
+          "label": "Desktop & Mobile"
+        },
+        {
+          "value": "show-for-large",
+          "label": "Desktop only"
+        },
+        {
+          "value": "hide-for-large",
+          "label": "Mobile only"
+        }
+      ],
+      "default": ""
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "html",
+      "id": "sub_title",
+      "label": "Sub Title"
+    },
+    {
+      "type": "html",
+      "id": "content",
+      "label": "Content"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Welcome Message",
+      "category": "Store information"
+    }
+  ]
+}
+{% endschema %}

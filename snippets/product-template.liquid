@@ -1,0 +1,467 @@
+<!-- /snippets/product-template.liquid -->
+{%- include 'breadcrumbs' -%}
+{%- if section.blocks.size > 0 -%}
+  {%- for block in section.blocks -%}
+    {%- if block.settings.position == 'left_sidebar' -%}
+      {%- assign left_sidebar = true -%}
+    {%- elsif block.settings.position == 'right_sidebar' -%}
+      {%- assign right_sidebar = true -%}
+    {%- elsif block.settings.position == 'top_content' -%}
+      {%- assign top_content = true -%}
+    {%- elsif block.settings.position == 'bottom_content' -%}
+      {%- assign bottom_content = true -%}
+    {%- elsif block.settings.position == 'top_container' -%}
+      {%- assign top_container = true -%}
+    {%- elsif block.settings.position == 'bottom_container' -%}
+      {%- assign bottom_container = true -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+{%- assign product_thumb_size = section.settings.image_width | append: 'x' | append: section.settings.image_height -%}
+{%- if top_container -%}
+  <div class="grid-container">
+    <div class="layout-top-container">
+      {%- for block in section.blocks -%}
+        {%- if block.settings.position == 'top_container' -%}
+          {%- include block.type -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}
+<div itemscope itemtype="http://schema.org/Product">
+  {%- assign current_variant = product.selected_or_first_available_variant -%}
+  {%- assign featured_image = current_variant.featured_image | default: product.featured_image -%}
+  <meta itemprop="name" content="{{ product.title }}{% unless product.has_only_default_variant %} - {{ current_variant.title }}{% endunless %}">
+  <meta itemprop="url" content="{{ shop.url }}{{ current_variant.url }}">
+  <meta itemprop="brand" content="{{ product.vendor }}">
+  <meta itemprop="image" content="{{ featured_image | img_url: product_thumb_size }}">
+  <meta itemprop="description" content="{{ product.description | strip_html | escape }}">
+  <div class="grid-container">
+    <div class="grid-x grid-margin-x">
+      {%- if left_sidebar -%}
+        <div class="cell small-12 large-3 layout-left-sidebar show-for-large">
+          {%- for block in section.blocks -%}
+            {%- if block.settings.position == 'left_sidebar' -%}
+              {%- include block.type -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+      <div class="cell auto layout-content">
+        {%- if top_content -%}
+          <div class="layout-top-content">
+            {%- for block in section.blocks -%}
+              {%- if block.settings.position == 'top_content' -%}
+                {%- include block.type -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+        <div class="grid-x grid-margin-x">
+          <div class="cell small-12 medium-6 large-6">
+            {%- if product.images.size -%}
+              <div class="grid-x grid-margin-x">
+                <div class="cell small-2 large-2 show-for-large">
+                  <div class="product-thumbnail" data-product-thumbnail>
+                    <div class="flex-container flex-dir-column align-middle">
+                      <div class="product-thumbnail-nav-prev" data-carousel-nav-prev><em class="sli sli-arrow-up"></em></div>
+                      <div class="swiper-container" data-carousel-container>
+                        <div class="swiper-wrapper">
+                          {%- assign thumb_height = section.settings.image_height | times: 100 | divided_by: section.settings.image_width | round -%}
+                          {%- assign thumb_size = '100x' | append: thumb_height -%}
+                          {% for image in product.images %}
+                            <div class="swiper-slide" data-carousel-item="{{ image.src | handle }}">
+                              <img src="{{ image.src | img_url: thumb_size, crop: 'center' }}" alt="{{ image.alt | escape }}"/>
+                            </div>
+                          {%- endfor -%}
+                        </div>
+                      </div>
+                      <div class="product-thumbnail-nav-next" data-carousel-nav-next><em class="sli sli-arrow-down"></em></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="cell auto">
+                  <div class="product-gallery carousel" data-product-gallery>
+                    <div class="carousel-wrapper carousel-nav-middle">
+                      <div class="swiper-container" data-carousel-container>
+                        <div class="swiper-wrapper">
+                          {% for image in product.images %}
+                            <div class="swiper-slide" data-carousel-item="{{ image.src | handle }}">
+                              <img src="{{ 'icon-loader-clock.svg' | asset_url }}" data-src="{{ image.src | img_url: product_thumb_size, crop: 'center', scale: 2 }}" data-height="{{ section.settings.image_height }}" data-width="{{ section.settings.image_width }}" class="swiper-lazy width-100" alt="{{ image.alt | escape }}"/>
+                            </div>
+                          {%- endfor -%}
+                        </div>
+                      </div>
+                      <div class="carousel-navigation carousel-nav-prev show-for-large" data-carousel-nav-prev><em class="sli sli-arrow-left"></em></div>
+                      <div class="carousel-navigation carousel-nav-next show-for-large" data-carousel-nav-next><em class="sli sli-arrow-right"></em></div>
+                    </div>
+                    <div class="carousel-pagination hide-for-large" data-carousel-pagination></div>
+                    <a class="product-zoom-in hide-for-large" data-product-gallery-zoom><em class="sli sli-magnifier-add"></em></a>
+                  </div>
+                </div>
+              </div>
+            {%- endif -%}
+          </div>
+          <div class="cell small-12 medium-6 large-6">
+            <div class="product-info-container" itemprop="offers" itemscope itemtype="http://schema.org/Offer" data-product-container>
+              <meta itemprop="priceCurrency" content="{{ shop.currency }}">
+              <meta itemprop="price" content="{{ current_variant.price | divided_by: 100.00 }}">
+              <link itemprop="available" href="http://schema.org/{% if current_variant.available %}InStock{%- else -%}OutOfStock{%- endif -%}">
+              <div class="hide-for-large">
+                <div class="product-widget">
+                  {%- if section.settings.show_compare_button -%}
+                    <div class="product-widget-item product-widget-compare text-center pointer" data-compare="{{ product.handle }}">
+                      <div class="product-widget-item-icon">
+                        <em class="sli sli-refresh icon-add"></em>
+                        <em class="sli sli-check icon-added"></em>
+                      </div>
+                      <div class="product-widget-item-text">{{ 'general.button.compare' | t }}</div>
+                    </div>
+                  {%- endif -%}
+                  {%- if section.settings.show_wishlist_button -%}
+                    <div class="product-widget-item product-widget-wishlist text-center pointer" data-wishlist="{{ product.handle }}">
+                      <div class="product-widget-item-icon">
+                        <em class="sli sli-heart icon-add"></em>
+                        <em class="sli sli-check icon-added"></em>
+                      </div>
+                      <div class="product-widget-item-text">{{ 'general.button.wishlist' | t }}</div>
+                    </div>
+                  {%- endif -%}
+                  {%- if section.settings.show_share_buttons -%}
+                    <div class="product-widget-item product-widget-sharing text-center">
+                      <div class="pointer" data-toggle="product-widget-sharing-dropdown">
+                        <div class="product-widget-item-icon"><em class="sli sli-share"></em></div>
+                        <div class="product-widget-item-text">{{ 'general.button.share' | t }}</div>
+                      </div>
+                      <div id="product-widget-sharing-dropdown" class="dropdown-pane product-widget-sharing-dropdown" data-dropdown>
+                        {%- include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product -%}
+                      </div>
+                    </div>
+                  {%- endif -%}
+                </div>
+              </div>
+              <h1 class="product-title">{{ product.title }}</h1>
+              {%- if section.settings.show_review -%}
+                <div class="product-rating">
+                  <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+                  <span class="product-rating-add"><a href="#product-detail-review" data-review-anchor>{{ 'products.review.add' | t }}</a></span>
+                </div>
+              {%- endif -%}
+              <div class="divider"></div>
+              <div class="product-price-wrapper" data-price-wrapper>
+                <span class="product-price" data-product-price>
+                  {{ current_variant.price | money }}
+                </span>
+                {% if product.compare_at_price_max > product.price %}
+                  <del class="product-price-old" data-product-compare-price>
+                    {% if current_variant.compare_at_price > current_variant.price %}
+                      {{ current_variant.compare_at_price | money }}
+                    {%- endif -%}
+                  </del>
+                {%- endif -%}
+              </div>
+              <ul class="product-info grid-x small-up-2 large-up-1">
+                {%- if section.settings.show_inventory -%}
+                  <li class="cell product-inventory">
+                    {% if current_variant.available %}
+                      {%- assign available = 'products.product.in_stock' | t -%}
+                    {%- else -%}
+                      {%- assign available = 'products.product.out_stock' | t -%}
+                    {%- endif -%}
+                    <span class="product-info-title">{{ 'products.product.available' | t }}:</span>
+                    <span class="product-info-text" data-product-inventory data-in-stock="{{ 'products.product.in_stock' | t }}" data-out-stock="{{ 'products.product.out_stock' | t }}">{{ available }}</span>
+                  </li>
+                {%- endif -%}
+                {%- if section.settings.show_sku -%}
+                  <li class="cell product-sku">
+                    <span class="product-info-title">{{ 'products.product.sku' | t }}:</span>
+                    <span class="product-info-text" data-product-sku>{{ current_variant.sku }}</span>
+                  </li>
+                {%- endif -%}
+                {%- if section.settings.show_type -%}
+                  <li class="cell product-type">
+                    <span class="product-info-title">{{ 'products.product.type' | t }}:</span>
+                    <span class="product-info-text">{{ product.type }}</span>
+                  </li>
+                {%- endif -%}
+                {%- if section.settings.show_vendor -%}
+                  <li class="cell product-vendor">
+                    <span class="product-info-title">{{ 'products.product.vendor' | t }}:</span>
+                    <span class="product-info-text">{{ product.vendor }}</span>
+                  </li>
+                {%- endif -%}
+              </ul>
+              <div class="divider"></div>
+              <div data-desktop-product-form-area>
+                <form action="/cart/add" method="post" enctype="multipart/form-data" class="product-form" data-product-form data-add-cart-form>
+                  {%- unless product.has_only_default_variant -%}
+                    <div class="product-option-list">
+                      {%- for option in product.options_with_values -%}
+                        <div class="product-option-item" data-product-option-row="{{ forloop.index }}">
+                          <div class="product-option-label">{{ option.name }}</div>
+                          <div class="product-option-value">
+                            {%- assign option_index = forloop.index0 -%}
+                            {%- assign option_name = option.name -%}
+                            {%- capture option_type -%}
+                              {%- include 'product-option-detector' -%}
+                            {%- endcapture -%}
+                            {%- assign option_type = option_type | strip | strip_newlines -%}
+                            {%- if option_type == 'image' or option_type == 'color' -%}
+                              <div class="grid-x">
+                                {%- assign color = '' -%}
+                                {%- assign shown_list = '' -%}
+                                {%- for variant in product.variants -%}
+                                  {%- assign option_handle = variant.options[option_index] -%}
+                                  {%- unless shown_list contains option_handle -%}
+                                    {%- if variant.image -%}
+                                      <label class="product-option-value-item product-option-image">
+                                        <input type="radio" name="option{{ option.position }}" {% if variant == current_variant %}checked="checked"{% endif %} value="{{ option_handle | escape }}" data-product-option="{{ option_index }}" data-product-option-swatch="{{ variant.image | handle }}" />
+                                        <img src="{{ 'icon-loader-clock.svg' | asset_url }}" data-src="{{ variant.image | img_url: thumb_height }}" class="display-block lazyload" alt="{{ option_handle }}"/>
+                                      </label>
+                                    {%- else -%}
+                                      {%- capture color_code -%}
+                                        {%- include 'product-option-color-detector' -%}
+                                      {%- endcapture -%}
+                                      {%- assign color_code = color_code | strip | strip_newlines -%}
+                                      {%- if color_code != blank -%}
+                                        <label class="product-option-value-item product-option-color">
+                                          <input type="radio" name="option{{ option.position }}" {% if variant == current_variant %}checked="checked"{% endif %} value="{{ option_handle | escape }}" data-product-option="{{ option_index }}" />
+                                          <span class="display-block" style="background: {{ color_code }};"></span>
+                                        </label>
+                                      {%- endif -%}
+                                    {%- endif -%}
+                                    {%- assign shown_list = shown_list | append: option_handle | append: ' ' -%}
+                                  {%- endunless -%}
+                                {%- endfor -%}
+                              </div>
+                            {%- elsif option_type == 'size' -%}
+                              <div class="grid-x">
+                                {%- for value in option.values -%}
+                                  <label class="product-option-value-item product-option-size">
+                                    <input type="radio" name="option{{ option.position }}" {% if option.selected_value == value %}checked="checked"{% endif %} value="{{ value | escape }}" data-product-option="{{ option_index }}" />
+                                    <span class="flex-container align-center-middle">{{ value }}</span>
+                                  </label>
+                                {%- endfor -%}
+                              </div>
+                            {%- elsif option_type == 'radio' -%}
+                              {%- for value in option.values -%}
+                                <label class="product-option-value-item product-option-radio flex-container align-middle">
+                                  <input type="radio" name="option{{ option.position }}" class="margin-0" {% if option.selected_value == value %}checked="checked"{% endif %} value="{{ value | escape }}" data-product-option="{{ option_index }}" />
+                                  <span>{{ value }}</span>
+                                </label>
+                              {%- endfor -%}
+                            {%- else -%}
+                              <select name="option{{ option.position }}" class="product-option-value-item product-option-dropdown" data-product-option="{{ option_index }}">
+                                {%- for value in option.values -%}
+                                  <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{%- endif -%}>{{ value }}</option>
+                                {%- endfor -%}
+                              </select>
+                            {%- endif -%}
+                          </div>
+                        </div>
+                      {%- endfor -%}
+                    </div>
+                  {%- endunless -%}
+                  <select name="id" class="product-id" data-product-select>
+                    {%- for variant in product.variants -%}
+                      <option {% if variant == current_variant %}selected="selected"{%- endif -%} {% unless variant.available %}disabled="disabled"{% endunless %} value="{{ variant.id }}">
+                        {{ variant.title }}
+                      </option>
+                    {%- endfor -%}
+                  </select>
+                  <div class="product-add-cart-container grid-x">
+                    <div class="product-quantity">
+                      <label class="input-label hide-for-large">{{ 'products.product.quantity' | t }}</label>
+                      <div class="input-group" data-number-group data-min="1">
+                        <span class="input-group-label pointer" data-minus><em class="sli sli-arrow-down"></em></span>
+                        <input type="text" name="quantity" value="1" class="input-group-field input-control" data-number />
+                        <span class="input-group-label pointer" data-plus><em class="sli sli-arrow-up"></em></span>
+                      </div>
+                    </div>
+                    <button type="submit" name="add" class="button primary radius product-add-cart" {% unless current_variant.available %}disabled="disabled"{% endunless %} data-product-add-cart>
+                      <em class="sli sli-basket"></em>
+                      <span data-product-add-cart-text>
+                        {%- if current_variant.available -%}
+                          {{ 'products.product.add_to_cart' | t }}
+                        {%- else -%}
+                          {{ 'products.product.sold_out' | t }}
+                        {%- endif -%}
+                      </span>
+                    </button>
+                    {%- if section.settings.show_wishlist_button -%}
+                      <a class="button radius product-wishlist show-for-large flex-container align-middle" data-wishlist="{{ product.handle }}">
+                        <em class="sli sli-heart icon-add" title="{{ 'general.button.wishlist' | t }}"></em>
+                        <em class="sli sli-check icon-added" title="{{ 'general.button.wishlist_added' | t }}"></em>
+                        {{ 'wishlist.button.add' | t }}
+                      </a>
+                    {%- endif -%}
+                  </div>
+                </form>
+              </div>
+              {%- if section.settings.show_share_buttons -%}
+                <div class="product-sharing show-for-large">
+                  {%- include 'social-sharing', share_title: product.title, share_permalink: product.url, share_image: product -%}
+                </div>
+              {%- endif -%}
+              {%- if section.settings.show_collections -%}
+                <div class="product-collection show-for-large grid-x">
+                  <div class="cell shrink product-collection-title">{{ 'products.product.collection' | t }}: </div>
+                  <div class="cell auto">
+                    {%- include 'product-collections' -%}
+                  </div>
+                </div>
+              {%- endif -%}
+              {%- if section.settings.show_tags -%}
+                <div class="product-tag show-for-large grid-x">
+                  <div class="cell shrink product-tag-title">{{ 'products.product.tag' | t }}: </div>
+                  <div class="cell auto">
+                    {%- include 'product-tags' -%}
+                  </div>
+                </div>
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+        <ul class="accordion" data-responsive-accordion-tabs="accordion large-tabs" data-multi-expand="true" data-allow-all-closed="true">
+          {%- if section.settings.show_description -%}
+            <li class="accordion-item is-active" data-accordion-item>
+              <a href="#product-detail-description" class="accordion-title">
+                <span>{{ 'products.tab.description' | t }}</span>
+                <svg class="svg-icon accordion-item-state accordion-item-state-close">
+                  <use xlink:href="#icon-plus"></use>
+                </svg>
+                <svg class="svg-icon accordion-item-state accordion-item-state-open">
+                  <use xlink:href="#icon-minus"></use>
+                </svg>
+              </a>
+              <div id="product-detail-description" class="accordion-content product-detail-description" data-tab-content>
+                {{ product.description }}
+              </div>
+            </li>
+          {%- endif -%}
+          {%- if section.settings.show_review -%}
+            <li class="accordion-item" data-accordion-item>
+              <a href="#product-detail-review" class="accordion-title">
+                  <span>{{ 'products.tab.review' | t }}</span>
+                  <svg class="svg-icon accordion-item-state accordion-item-state-close">
+                    <use xlink:href="#icon-plus"></use>
+                  </svg>
+                  <svg class="svg-icon accordion-item-state accordion-item-state-open">
+                    <use xlink:href="#icon-minus"></use>
+                  </svg>
+              </a>
+              <div id="product-detail-review" class="accordion-content product-detail-review" data-tab-content>
+                <div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
+              </div>
+            </li>
+          {%- endif -%}
+          {%- if section.blocks.size > 0 -%}
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'collection-tab' -%}
+                <li class="accordion-item" data-accordion-item>
+                  <a href="#product-detail-custom-{{ forloop.index }}" class="accordion-title">
+                      <span>{{ block.settings.title }}</span>
+                      <svg class="svg-icon accordion-item-state accordion-item-state-close">
+                        <use xlink:href="#icon-plus"></use>
+                      </svg>
+                      <svg class="svg-icon accordion-item-state accordion-item-state-open">
+                        <use xlink:href="#icon-minus"></use>
+                      </svg>
+                  </a>
+                  <div id="product-detail-custom-{{ forloop.index }}" class="accordion-content product-detail-custom" data-tab-content>
+                    {{ block.settings.content }}
+                  </div>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+        </ul>
+        {%- if bottom_content -%}
+          <div class="layout-bottom-content">
+            {%- for block in section.blocks -%}
+              {%- if block.settings.position == 'bottom_content' -%}
+                {%- include block.type -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+      {%- if right_sidebar -%}
+        <div class="cell small-12 large-3 layout-right-sidebar show-for-large">
+          {%- for block in section.blocks -%}
+            {%- if block.settings.position == 'right_sidebar' -%}
+              {%- include block.type -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+<a class="product-buy flex-container align-center-middle hide-for-large" data-toggle="product-form"><em class="sli sli-basket"></em></a>
+{%- if bottom_container -%}
+  <div class="grid-container">
+    <div class="layout-bottom-container">
+      {%- for block in section.blocks -%}
+        {%- if block.settings.position == 'bottom_container' -%}
+          {%- include block.type -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+{%- endif -%}
+<div id="product-form" class="layout-mobile-overlap reveal full" data-reveal data-overlap-mobile data-v-offset="0" data-h-offset="0" data-overlay="false" data-animation-in="fade-in fast" data-animation-out="fade-out fast" data-enable-padding="true">
+  {%- assign map_to = 'product-form' -%}
+  {%- capture mobile_header_left -%}
+    <a class="header-button-back display-inline-block" data-close="product-form">
+      <svg class="svg-icon">
+        <use xlink:href="#icon-arrow-left" />
+      </svg>
+    </a>
+  {%- endcapture -%}
+  {%- include 'header-mobile-overlap' -%}
+  <div class="product-form-container" data-mobile-product-form-area></div>
+</div>
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true" data-product-pswp>
+  <div class="pswp__bg"></div>
+  <div class="pswp__scroll-wrap">
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    <div class="pswp__ui pswp__ui--hidden">
+      <div class="pswp__top-bar">
+        <div class="pswp__counter"></div>
+        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+        <button class="pswp__button pswp__button--share" title="Share"></button>
+        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+        <div class="pswp__preloader">
+          <div class="pswp__preloader__icn">
+            <div class="pswp__preloader__cut">
+              <div class="pswp__preloader__donut"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+        <div class="pswp__share-tooltip"></div> 
+      </div>
+      <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+      <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+      <div class="pswp__caption">
+        <div class="pswp__caption__center"></div>
+      </div>
+    </div>
+  </div>
+</div>
+{%- unless product == empty -%}
+  <script>
+    if (theme === undefined) {
+      var theme = {};
+    }
+    theme.product = {{ product | json }};
+  </script>
+{%- endunless -%}

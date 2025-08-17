@@ -1,0 +1,60 @@
+<!-- /templates/search.liquid -->
+{%- paginate search.results by 20 -%}
+  <div class="search">
+    <div class="grid-container">
+      <form action="/search" method="get" role="search">
+        {%- unless settings.general_search_article -%}
+          <input type="hidden" name="type" value="product"/>
+        {%- endunless -%}
+        <div class="search-form">
+          <div class="input-group">
+            <input type="text" class="input-group-field control-input padding-horizontal-0" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}" aria-label="{{ 'general.search.placeholder' | t }}" />
+            <span class="input-group-button"><button type="submit" class="button clear"><em class="sli sli-magnifier"></em></button></span>
+          </div>
+        </div>
+      </form>
+      <div class="page-heading">
+        {%- if search.results_count == 0 or search.performed == false -%}
+          <h1 class="page-title">{{ 'general.search.title' | t }}</h1>
+        {%- else -%}
+          <h1 class="page-title">{{ 'general.search.results_with_count' | t: terms: search.terms, count: search.results_count }}</h1>
+        {%- endif -%}
+      </div>
+      <div class="page-content">
+        {%- if search.performed and search.results_count == 0 -%}
+          <hr class="hr--small hr--invisible">
+          <p>{{ 'general.search.no_results_html' | t: terms: search.terms }}</p>
+        {%- endif -%}
+        {%- if search.performed -%}
+          <div class="grid-x grid-margin-x small-up-2 medium-up-3 large-up-4 xlarge-up-5 xxlarge-up-5 xxxlarge-up-5">
+            {%- for item in search.results -%}
+              {%- if item.object_type == 'product' -%}
+                <div class="search-product-item cell">
+                  <div class="product-grid" data-product-layout>
+                    {%- include 'index-product-item', product: item -%}
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          <div class="grid-x grid-margin-x small-up-2 medium-up-3 large-up-4 xlarge-up-5 xxlarge-up-5 xxxlarge-up-5">
+            {%- for item in search.results -%}
+              {%- if item.object_type == 'article' -%}
+                <div class="cell">
+                  <div class="search-article-item article-grid">
+                    {%- include 'index-article-item', article: item -%}
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+          {%- if paginate.pages > 1 -%}
+            <div class="search-pagination flex-container align-right">
+              {%- include 'pagination' -%}
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+{%- endpaginate -%}

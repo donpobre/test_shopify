@@ -1,0 +1,44 @@
+<!-- /snippets/search-box.liquid -->
+<div id="search-box" class="width-100 padding-0 reveal full" data-reveal data-overlap-mobile data-v-offset="0" data-h-offset="0" data-overlay="false" data-animation-in="fade-in fast" data-animation-out="fade-out fast">
+  <form class="search-box-form" action="/search" method="get" role="search" data-ajax-search data-template="ajax-product-mobile">
+    {%- unless settings.general_search_article -%}
+      <input type="hidden" name="type" value="product"/>
+    {%- endunless -%}
+    <div class="search-box-container">
+      <div class="input-group">
+        <span class="input-group-label"><em class="sli sli-magnifier"></em></span>
+        <input type="text" class="input-group-field control-input padding-horizontal-0" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}" aria-label="{{ 'general.search.placeholder' | t }}" data-ajax-search-input />
+      </div>
+      <div class="flex-container align-right">
+        <a class="button button-cancel clear text-uppercase" data-close> {{ 'general.button.cancel' | t }} </a>
+        <button class="button button-submit clear text-uppercase" type="submit"> {{ 'general.button.ok' | t }} </button>
+      </div>
+    </div>
+    <div class="grid-container fluid">
+      <div data-ajax-search-result></div>
+    </div>
+  </form>
+</div>
+<div id="search-box-desktop" class="off-canvas position-top show-for-large" data-off-canvas data-overlap-desktop>
+  <div class="grid-container">
+    <form action="/search" method="get" role="search" data-ajax-search data-template="ajax-product-desktop">
+      {%- unless settings.general_search_article -%}
+        <input type="hidden" name="type" value="product"/>
+      {%- endunless -%}
+      <div class="search-box-desktop-form">
+        <div class="input-group">
+          <input type="text" class="input-group-field control-input padding-horizontal-0" name="q" value="{{ search.terms | escape }}" placeholder="{{ 'general.search.placeholder' | t }}" aria-label="{{ 'general.search.placeholder' | t }}" data-ajax-search-input />
+          <span class="input-group-button"><button type="submit" class="button clear"><em class="sli sli-magnifier"></em></button></span>
+        </div>
+        <div class="grid-x">
+          <div class="cell auto"></div>
+          <div class="cell shrink">
+            <a class="button button-cancel clear text-uppercase" data-close> {{ 'general.button.cancel' | t }} </a>
+            <button class="button button-submit clear text-uppercase" type="submit"> {{ 'general.button.ok' | t }} </button>
+          </div>
+        </div>
+      </div>
+      <div data-ajax-search-result></div>
+    </form>
+  </div>
+</div>

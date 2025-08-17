@@ -1,0 +1,92 @@
+<!-- /sections/about-template.liquid -->
+<div class="grid-container">
+  <div class="about-content">
+    {% if section.settings.video_enable %}
+      <div class="about-video">
+        {{ section.settings.video_caption }}
+      </div>
+    {% endif %}
+    {% if section.blocks.size > 0 %}
+      <div class="about-info">
+        <div class="grid-x grid-margin-x">
+          {% for block in section.blocks %}
+            <div class="about-info-item cell large-{{ block.settings.grid }}">
+              <h2 class="about-info-title">{{ block.settings.title }}</h2>
+              <p class="about-info-description">{{ block.settings.description }}</p>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% schema %}
+{
+  "name": "About Us Page",
+  "class": "about",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "You need create the Page in Admin Panel and set the layout is page.about"
+    },
+    {
+      "type": "header",
+      "content": "Video"
+    },
+    {
+      "type": "checkbox",
+      "id": "video_enable",
+      "label": "Set active this block",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "video_caption",
+      "label": "Iframe Video",
+      "info": "[Where do I get my Iframe?](https://support.google.com/youtube/answer/171780)"
+    },
+    {
+      "type": "header",
+      "content": "Information"
+    },
+    {
+      "type": "paragraph",
+      "content": "Add item in Blocks"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "grid",
+          "label": "Grid For Desktop",
+          "options": [
+            {
+              "value": "12",
+              "label": "1/1"
+            },
+            {
+              "value": "6",
+              "label": "1/2"
+            }
+          ],
+          "default": "12"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

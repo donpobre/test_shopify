@@ -1,0 +1,22 @@
+<!-- /snippets/index-article-item.liquid -->
+<div class="article-item">
+  {%- if article.image -%}
+    <div class="article-item-thumb">
+      <a href="{{ article.url }}" class="display-block">
+        {%- if article_image_size == empty or article_image_size == blank -%}
+          {%- assign article_image_size = '450x' -%}
+        {%- endif -%}
+        <img src="{{ 'icon-loader-clock.svg' | asset_url }}" data-src="{{ article.image | img_url: article_image_size }}" data-srcset="{{ article.image | img_url: article_image_size }} 800w, {{ article.image | img_url: article_image_size, scale: 2 }} 1440w, {{ article.image | img_url: article_image_size, scale: 3 }} 1920w" class="article-item-image lazyload" alt="{{ article.title }}"/>
+      </a>
+    </div>
+  {%- endif -%}
+  <div class="article-item-caption">                
+    <h2 class="article-item-title">
+      <a href="{{ article.url }}">{{ article.title }}</a>
+    </h2>
+    <div class="article-item-info">
+      {{ 'general.text.by' | t }} <span class="article-item-author">{{ article.author }}</span>, 
+      <span class="article-item-date">{{ article.published_at | date: '%b %d, %Y' }}</span>
+    </div>
+  </div>
+</div>

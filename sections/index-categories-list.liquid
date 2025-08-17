@@ -1,0 +1,121 @@
+<!-- /sections/index-categories-list.liquid -->
+<div class="index-categories-container {{ section.settings.display }}">
+  <div class="grid-container">
+    <div class="box border-none">
+      {%- if section.settings.title != blank or section.settings.sub_title != blank -%}
+        <div class="box-divider grid-x">
+          {%- if section.settings.title != blank -%}
+            <h2 class="box-title width-100">{{ section.settings.title }}</h2>
+          {%- endif -%}
+          {%- if section.settings.sub_title != blank -%}
+            <p class="box-sub-title width-100">{{ section.settings.sub_title }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      <div class="box-content">
+        {% if section.blocks.size > 0 %}
+          <div class="grid-x grid-margin-x small-up-1 large-up-2">
+            {% for block in section.blocks %}
+              <div class="cell index-categories-item">
+                <div class="grid-x">
+                  <div class="cell large-7 xlarge-6 index-categories-item-banner effect effect-pulse">
+                    {% if block.settings.banner %}
+                      <img src="{{ 'icon-loader-clock.svg' | asset_url }}" data-src="{{ block.settings.banner | img_url: '', crop: 'center' }}" class="lazyload width-100" alt="{{ block.settings.banner.alt }}"/>
+                    {% else %}
+                      <img src="{{ 'icon-loader-clock.svg' | asset_url }}" data-src="{{ '355x500.png' | asset_url }}" class="lazyload width-100" alt="{{ block.settings.banner.alt }}"/>
+                    {% endif %}
+                  </div>
+                  <div class="cell large-5 xlarge-6 index-categories-item-content">
+                    <div class="index-categories-item-divider">
+                      <h2 class="index-categories-item-title">{{ block.settings.title }}</h2>
+                      <p class="index-categories-item-subtitle">{{ block.settings.sub_title }}</p>
+                    </div>
+                    <ul class="index-categories-item-nav no-bullet margin-0">
+                      {% for link in linklists[block.settings.linklist].links %}
+                        <li class="index-categories-item-nav-link">
+                          <a href="{{ link.url }}" class="display-block">{{ link.title }}</a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Categories List",
+  "class": "index-section index-categories",
+  "settings": [
+    {
+      "type": "select",
+      "id": "display",
+      "label": "Display on",
+      "options": [
+        {
+          "value": "",
+          "label": "Desktop & Mobile"
+        },
+        {
+          "value": "show-for-large",
+          "label": "Desktop only"
+        },
+        {
+          "value": "hide-for-large",
+          "label": "Mobile only"
+        }
+      ],
+      "default": ""
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "html",
+      "id": "sub_title",
+      "label": "Sub Title"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "banner",
+          "label": "Upload banner"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "text",
+          "id": "sub_title",
+          "label": "Sub Title"
+        },
+        {
+          "type": "link_list",
+          "id": "linklist",
+          "label": "Select Link List"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Categories List",
+      "category": "Store information"
+    }
+  ]
+}
+{% endschema %}

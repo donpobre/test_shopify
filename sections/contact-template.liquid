@@ -1,0 +1,162 @@
+<!-- /sections/contact-template.liquid -->
+{%- include 'breadcrumbs' -%}
+<div class="page-content">
+  <div class="grid-container">
+    <div class="grid-x grid-margin-x">
+      <div class="cell large-6">
+        <div class="hide-for-large text-center">
+          <div class="contact-icon">
+            <em class="sli sli-location-pin"></em>
+          </div>
+          <h1 class="contact-title">{{ page.title }}</h1>
+          {%- if section.settings.address != blank -%}
+            <div class="contact-info-address">
+              {{ section.settings.address }}
+            </div>
+          {%- endif -%}
+          {%- if section.settings.fax != blank -%}
+            <div class="contact-info-fax">
+              <span>{{ 'contact.information.fax' | t }}:</span> {{ section.settings.fax }}
+            </div>
+          {%- endif -%}
+          {%- if section.settings.phone != blank -%}
+            <div class="contact-info-phone">
+              <a href="tel:{{ section.settings.phone | remove: ' ' | remove: '.' | remove: '-' | remove: '(' | remove: ')' }}" class="button border-none rounded">
+                <em class="sli sli-phone"></em>
+                <span>{{ 'contact.information.call' | t }}:</span> {{ section.settings.phone }}
+              </a>
+            </div>
+          {%- endif -%}
+          {%- if section.settings.email != blank -%}
+            <div class="contact-info-email">
+              <a href="mailto:{{ section.settings.email | downcase  }}" class="button border-none rounded">
+                <em class="sli sli-envelope"></em> {{ section.settings.email }}
+              </a>
+            </div>
+          {%- endif -%}
+        </div>
+        <div class="show-for-large">
+          <h1 class="contact-title">{{ page.title }}</h1>
+          <div class="contact-info">
+            {%- if section.settings.address != blank -%}
+              <div class="contact-info-address">
+                <strong>{{ 'contact.information.address' | t }}:</strong> {{ section.settings.address }}
+              </div>
+            {%- endif -%}
+            {%- if section.settings.email != blank -%}
+              <div class="contact-info-email">
+                <strong>{{ 'contact.information.email' | t }}:</strong> {{ section.settings.email }}
+              </div>
+            {%- endif -%}
+            {%- if section.settings.phone != blank -%}
+              <div class="contact-info-phone">
+                <strong>{{ 'contact.information.phone' | t }}:</strong> {{ section.settings.phone }}
+              </div>
+            {%- endif -%}
+            {%- if section.settings.fax != blank -%}
+              <div class="contact-info-fax">
+                <strong>{{ 'contact.information.fax' | t }}:</strong> {{ section.settings.fax }}
+              </div>
+            {%- endif -%}
+          </div>
+          {%- if page.content != blank -%}
+            <div class="contact-description">{{ page.content }}</div>
+          {%- endif -%}
+          {%- if section.settings.map_enable -%}
+            <div class="show-for-large">
+              {{ section.settings.map_caption }}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+      <div class="cell large-6">
+        {%- form 'contact' -%}
+          {%- if form.posted_successfully? -%}
+            <div class="callout success">
+              {{ 'contact.form.post_success' | t }}
+            </div>
+          {%- endif -%}
+          {%- if form.errors -%}
+            <div class="callout alert">
+              {{ form.errors | default_errors }}
+            </div>
+          {%- endif -%}
+          <div class="form-group">
+            <label class="form-group-label">{{ 'contact.form.name' | t }}</label>
+            <input type="text" name="contact[name]" value="{% if form[name] %}{{ form[name] }}{% elsif customer %}{{ customer.name }}{% endif %}" placeholder="{{ 'contact.form.name' | t }}" class="form-group-field" />
+          </div>
+          <div class="form-group{% if form.errors contains 'email' %} has-error{% endif %}">
+            <label class="form-group-label">{{ 'contact.form.email' | t }}</label>
+            <input type="email" name="contact[email]"  autocapitalize="off" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}" placeholder="{{ 'contact.form.email' | t }}" class="form-group-field" />
+          </div>
+          <div class="form-group">
+            <label class="form-group-label">{{ 'contact.form.phone' | t }}</label>
+            <input type="text" name="contact[phone]" value="{% if form[phone] %}{{ form[phone] }}{% elsif customer %}{{ customer.phone }}{% endif %}" placeholder="{{ 'contact.form.phone' | t }}" class="form-group-field" />
+          </div>
+          <div class="form-group">
+            <label class="form-group-label">{{ 'contact.form.message' | t }}</label>
+            <textarea name="contact[body]" placeholder="{{ 'contact.form.message' | t }}" class="form-group-field">{% if form.body %}{{ form.body }}{% endif %}</textarea>
+          </div>
+          <input type="submit" class="button primary radius form-button" value="{{ 'contact.form.submit' | t }}"/>
+        {%- endform -%}
+      </div>
+    </div>
+  </div>
+  {%- if section.settings.map_enable -%}
+    <div class="hide-for-large">
+      {{ section.settings.map_caption }}
+    </div>
+  {%- endif -%}
+</div>
+{% schema %}
+{
+  "name": "Contact Page",
+  "class": "contact",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "You need create the Page in Admin Panel and set the layout is page.contact"
+    },
+    {
+      "type": "text",
+      "id": "address",
+      "label": "Address"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "EMail"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone"
+    },
+    {
+      "type": "text",
+      "id": "fax",
+      "label": "FAX"
+    },
+    {
+      "type": "paragraph",
+      "content": "We decided move Short Description to the Page in Admin Panel. Edit the contact page you have created, change the value of page content to edit the Short Description."
+    },
+    {
+      "type": "header",
+      "content": "Google Map"
+    },
+    {
+      "type": "checkbox",
+      "id": "map_enable",
+      "label": "Set active this block",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "map_caption",
+      "label": "Iframe Map",
+      "info": "[Where do I get my Iframe?](https://developers.google.com/maps/documentation/embed/guide)"
+    }
+  ]
+}
+{% endschema %}

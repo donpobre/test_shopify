@@ -1,0 +1,544 @@
+<!-- /sections/index-top-collection.liquid -->
+{%- assign image_size = section.settings.image_width | append: 'x' | append: section.settings.image_height -%}
+<div class="{{ section.settings.display }}">
+  <div class="grid-container"> 
+    <div class="box border-none index-top-collection-container">
+      {%- if section.settings.title != blank or section.settings.sub_title != blank -%}
+        <div class="box-divider grid-x">
+          {%- if section.settings.title != blank -%}
+            <h2 class="title width-100">{{ section.settings.title }}</h2>
+          {%- endif -%}
+          {%- if section.settings.sub_title != blank -%}
+            <p class="sub-title width-100">{{ section.settings.sub_title }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      <div class="box-content">
+        {%- if section.blocks.size > 0 -%}
+          <div class="index-top-collection-list grid-x grid-margin-x align-center">
+            {%- for block in section.blocks -%}              
+              {%- assign collection = collections[block.settings.collection] -%}
+              <div class="index-top-collection-item cell small-{{ block.settings.column_small }} medium-{{ block.settings.column_medium }} large-{{ block.settings.column_large }} xlarge-{{ block.settings.column_xlarge }} xxlarge-{{ block.settings.column_xxlarge }} xxxlarge-{{ block.settings.column_xxxlarge }} {% if forloop.index > section.settings.cut_off and section.settings.cut_off != 0 %}show-for-large{% endif %}">
+                <div class="position-relative {{ block.settings.background }}{% if block.settings.image == blank %} min-height-300{% endif %}">
+                  {%- unless block.settings.image == blank -%}
+                    <a href="{{ collection.url }}" class="index-top-collection-image display-block">
+                      <img src="{{ 'icon-loader-clock.svg' | asset_url }}" data-src="{{ block.settings.image | img_url: image_size }}" class="lazyload width-100" alt="{{ collection.title }}" />
+                    </a>
+                  {% else %}
+                    <a href="{{ block.settings.link }}" class="index-banner-grid-image display-block">
+                      <img src="{{ 'icon-loader-clock.svg' | asset_url }}" data-src="{{ '710x450.png' | asset_url }}" class="width-100 lazyload" alt="{{ block.settings.image.alt }}" />
+                    </a>
+                  {%- endunless -%}
+                  <div class="index-top-collection-info{% unless block.settings.image == blank %} index-top-collection-info--image{% endunless %}">
+                    <h3 class="index-top-collection-title index-top-collection-title--{{ block.settings.style }}">
+                      <a href="{{ collection.url }}">
+                        {%- if block.settings.title != blank -%}
+                          {{ block.settings.title }}
+                        {%- else -%}
+                          {{ collection.title }}
+                        {%- endif -%}
+                      </a>
+                    </h3>
+                    {%- if block.settings.action_text != blank -%}
+                      <a href="{{ collection.url }}" class="button index-top-collection-button">
+                        <span class="index-top-collection-button-text">
+                          {{ block.settings.action_text }}
+                          <svg class="svg-icon index-top-collection-button-right">
+                            <use xlink:href="#icon-arrow-right-alt"></use>
+                          </svg>
+                          <svg class="svg-icon index-top-collection-button-left">
+                            <use xlink:href="#icon-arrow-left-alt"></use>
+                          </svg>
+                        </span>
+                      </a>
+                    {%- endif -%}
+                  </div>
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+          {%- if section.blocks.size > section.settings.cut_off and section.settings.cut_off != 0 -%}
+            <div class="hide-for-large">
+              <div data-accordion>
+                <div class="accordion-item" data-accordion-item>
+                  <div class="accordion-content border-none padding-0" data-tab-content>
+                    {%- for block in section.blocks -%}
+                      {%- if forloop.index > section.settings.cut_off -%}
+                        {%- if block.settings.collection != blank and collections[block.settings.collection] != blank -%}
+                          {%- assign collection = collections[block.settings.collection] -%}
+                          <div class="index-top-collection-accordion-item margin-horizontal-0">
+                            <div class="position-relative {{ block.settings.background }}{% if block.settings.image == blank %} min-height-300{% endif %}">
+                              {%- unless block.settings.image == blank -%}
+                                <a href="{{ collection.url }}" class="index-top-collection-image display-block">
+                                  <img src="{{ 'icon-loader-clock.svg' | asset_url }}" data-src="{{ block.settings.image | img_url: image_size }}" class="lazyload width-100" alt="{{ collection.title }}" />
+                                </a>
+                              {%- endunless -%}
+                              <div class="index-top-collection-info{% unless block.settings.image == blank %} index-top-collection-info--image{% endunless %}">
+                                <h3 class="index-top-collection-title index-top-collection-title--{{ block.settings.style }}">
+                                  <a href="{{ collection.url }}">
+                                    {%- if block.settings.title != blank -%}
+                                      {{ block.settings.title }}
+                                    {%- else -%}
+                                      {{ collection.title }}
+                                    {%- endif -%}
+                                  </a>
+                                </h3>
+                                {%- if block.settings.action_text != blank -%}
+                                  <a href="{{ collection.url }}" class="button index-top-collection-button">
+                                    <span class="index-top-collection-button-text">
+                                      {{ block.settings.action_text }}
+                                      <svg class="svg-icon index-top-collection-button-right">
+                                        <use xlink:href="#icon-arrow-right-alt"></use>
+                                      </svg>
+                                      <svg class="svg-icon index-top-collection-button-left">
+                                        <use xlink:href="#icon-arrow-left-alt"></use>
+                                      </svg>
+                                    </span>
+                                  </a>
+                                {%- endif -%}
+                              </div>
+                            </div>
+                          </div>
+                        {%- endif -%}
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </div>
+                  <a class="index-top-collection-expand text-center text-uppercase">{{ 'general.text.more' | t }} +</a>
+                </div>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+{% schema %}
+{
+  "name": "Top Collection",
+  "class": "index-top-collection",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "select",
+      "id": "display",
+      "label": "Display on",
+      "options": [
+        {
+          "value": "",
+          "label": "Desktop & Mobile"
+        },
+        {
+          "value": "show-for-large",
+          "label": "Desktop only"
+        },
+        {
+          "value": "hide-for-large",
+          "label": "Mobile only"
+        }
+      ],
+      "default": ""
+    },
+    {
+      "type": "header",
+      "content": "Title"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "html",
+      "id": "sub_title",
+      "label": "Sub-title"
+    },
+    {
+      "type": "header",
+      "content": "Settings"
+    },
+    {
+      "type": "number",
+      "id": "image_width",
+      "label": "Image width",
+      "default": 200
+    },
+    {
+      "type": "number",
+      "id": "image_height",
+      "label": "Image height",
+      "default": 200
+    },
+    {
+      "type": "number",
+      "id": "cut_off",
+      "label": "Items cut off point",
+      "info": "The items from this number will be hidden in a collapse",
+      "default": 3
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "info": "Leave empty if want to display the original collection title."
+        },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Title style",
+          "options": [
+            {
+              "value": "dark",
+              "label": "Dark"
+            },
+            {
+              "value": "light",
+              "label": "Light"
+            }
+          ],
+          "default": "dark"
+        },
+        {
+          "type": "text",
+          "id": "action_text",
+          "label": "Action text",
+          "default": "Shop Now"
+        },
+        {
+          "type": "select",
+          "id": "background",
+          "label": "Background",
+          "info": "If the collection image is not defined, the gradient background will be replaced.",
+          "options": [
+            {
+              "value": "gradient-red",
+              "label": "Red"
+            },
+            {
+              "value": "gradient-orange",
+              "label": "Orange"
+            },
+            {
+              "value": "gradient-yellow",
+              "label": "Yellow"
+            },
+            {
+              "value": "gradient-green",
+              "label": "Green"
+            },
+            {
+              "value": "gradient-blue",
+              "label": "Blue"
+            },
+            {
+              "value": "gradient-teal",
+              "label": "Teal"
+            },
+            {
+              "value": "gradient-purple",
+              "label": "Purple"
+            }
+          ],
+          "default": "gradient-blue"
+        },
+        {
+          "type": "header",
+          "content": "Responsive width"
+        },
+        {
+          "type": "select",
+          "id": "column_small",
+          "label": "Width",
+          "info": "For small screen (0px - 550px)",
+          "options": [
+            {
+              "value": "12",
+              "label": "1/1"
+            },
+            {
+              "value": "6",
+              "label": "1/2"
+            },
+            {
+              "value": "4",
+              "label": "1/3"
+            },
+            {
+              "value": "3",
+              "label": "1/4"
+            },
+            {
+              "value": "2-4",
+              "label": "1/5"
+            },
+            {
+              "value": "2",
+              "label": "1/6"
+            },
+            {
+              "value": "8",
+              "label": "2/3"
+            },
+            {
+              "value": "9",
+              "label": "3/4"
+            },
+            {
+              "value": "10",
+              "label": "5/6"
+            }
+          ],
+          "default": "12"
+        },
+        {
+          "type": "select",
+          "id": "column_medium",
+          "label": "Width",
+          "info": "For medium screen (551px - 800px)",
+          "options": [
+            {
+              "value": "12",
+              "label": "1/1"
+            },
+            {
+              "value": "6",
+              "label": "1/2"
+            },
+            {
+              "value": "4",
+              "label": "1/3"
+            },
+            {
+              "value": "3",
+              "label": "1/4"
+            },
+            {
+              "value": "2-4",
+              "label": "1/5"
+            },
+            {
+              "value": "2",
+              "label": "1/6"
+            },
+            {
+              "value": "8",
+              "label": "2/3"
+            },
+            {
+              "value": "9",
+              "label": "3/4"
+            },
+            {
+              "value": "10",
+              "label": "5/6"
+            }
+          ],
+          "default": "6"
+        },
+        {
+          "type": "select",
+          "id": "column_large",
+          "label": "Width",
+          "info": "For large screen (801px - 1260px)",
+          "options": [
+            {
+              "value": "12",
+              "label": "1/1"
+            },
+            {
+              "value": "6",
+              "label": "1/2"
+            },
+            {
+              "value": "4",
+              "label": "1/3"
+            },
+            {
+              "value": "3",
+              "label": "1/4"
+            },
+            {
+              "value": "2-4",
+              "label": "1/5"
+            },
+            {
+              "value": "2",
+              "label": "1/6"
+            },
+            {
+              "value": "8",
+              "label": "2/3"
+            },
+            {
+              "value": "9",
+              "label": "3/4"
+            },
+            {
+              "value": "10",
+              "label": "5/6"
+            }
+          ],
+          "default": "4"
+        },
+        {
+          "type": "select",
+          "id": "column_xlarge",
+          "label": "Width",
+          "info": "For xlarge screen (1261px - 1440px)",
+          "options": [
+            {
+              "value": "12",
+              "label": "1/1"
+            },
+            {
+              "value": "6",
+              "label": "1/2"
+            },
+            {
+              "value": "4",
+              "label": "1/3"
+            },
+            {
+              "value": "3",
+              "label": "1/4"
+            },
+            {
+              "value": "2-4",
+              "label": "1/5"
+            },
+            {
+              "value": "2",
+              "label": "1/6"
+            },
+            {
+              "value": "8",
+              "label": "2/3"
+            },
+            {
+              "value": "9",
+              "label": "3/4"
+            },
+            {
+              "value": "10",
+              "label": "5/6"
+            }
+          ],
+          "default": "3"
+        },
+        {
+          "type": "select",
+          "id": "column_xxlarge",
+          "label": "Width",
+          "info": "For xxlarge screen (1441px - 1680px)",
+          "options": [
+            {
+              "value": "12",
+              "label": "1/1"
+            },
+            {
+              "value": "6",
+              "label": "1/2"
+            },
+            {
+              "value": "4",
+              "label": "1/3"
+            },
+            {
+              "value": "3",
+              "label": "1/4"
+            },
+            {
+              "value": "2-4",
+              "label": "1/5"
+            },
+            {
+              "value": "2",
+              "label": "1/6"
+            },
+            {
+              "value": "8",
+              "label": "2/3"
+            },
+            {
+              "value": "9",
+              "label": "3/4"
+            },
+            {
+              "value": "10",
+              "label": "5/6"
+            }
+          ],
+          "default": "2-4"
+        },
+        {
+          "type": "select",
+          "id": "column_xxxlarge",
+          "label": "Width",
+          "info": "For xxxlarge screen (1681px - infinity)",
+          "options": [
+            {
+              "value": "12",
+              "label": "1/1"
+            },
+            {
+              "value": "6",
+              "label": "1/2"
+            },
+            {
+              "value": "4",
+              "label": "1/3"
+            },
+            {
+              "value": "3",
+              "label": "1/4"
+            },
+            {
+              "value": "2-4",
+              "label": "1/5"
+            },
+            {
+              "value": "2",
+              "label": "1/6"
+            },
+            {
+              "value": "8",
+              "label": "2/3"
+            },
+            {
+              "value": "9",
+              "label": "3/4"
+            },
+            {
+              "value": "10",
+              "label": "5/6"
+            }
+          ],
+          "default": "2"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Top Collection",
+      "category": "Collection"
+    }
+  ]
+}
+{% endschema %}

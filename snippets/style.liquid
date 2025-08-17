@@ -1,0 +1,9 @@
+{%- if settings.general_page_direction == 'ltr' -%}
+  <link href="{{ 'style.scss.css' | asset_url }}" rel="stylesheet" type="text/css" media="all"/>
+  <link href="{{ 'style-tablet.scss.css' | asset_url }}" rel="stylesheet" type="text/css" media="all and (min-width: 551px)"/>
+  <link href="{{ 'style-desktop.scss.css' | asset_url }}" rel="stylesheet" type="text/css" media="all and (min-width: 1261px)"/>
+{%- else -%}
+  <link href="{{ 'style-rtl.scss.css' | asset_url }}" rel="stylesheet" type="text/css" media="all"/>
+  <link href="{{ 'style-rtl-tablet.scss.css' | asset_url }}" rel="stylesheet" type="text/css" media="all and (min-width: 551px)"/>
+  <link href="{{ 'style-rtl-desktop.scss.css' | asset_url }}" rel="stylesheet" type="text/css" media="all and (min-width: 1261px)"/>
+{%- endif -%}

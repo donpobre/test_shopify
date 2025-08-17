@@ -1,0 +1,53 @@
+<!-- /snippets/theme-header-mobile.liquid -->
+<div class="grid-x align-middle">
+  <div class="cell auto">
+    <div class="flex-container align-left" data-header-left>
+      {%- if template.name == 'index' -%}
+        <a class="header-icon-search display-inline-block" data-toggle="search-box"><em class="sli sli-magnifier"></em></a>
+      {%- else -%}
+        <a class="header-button-back display-inline-block" data-header-back>
+          <svg class="svg-icon">
+            <use xlink:href="#icon-arrow-left" />
+          </svg>
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+  <div class="cell shrink header-content flex-container flex-dir-column align-center-middle">
+    <div data-header-default>
+      {%- if template contains 'page' -%}
+        <h2 class="header-title">{{ page.title }}</h2>
+      {%- elsif template contains 'collection' -%}
+        <h2 class="header-title">
+          {%- if collection.title -%}
+            {{ collection.title }}
+          {%- else -%}
+            {{ 'collections.general.title' | t }}
+          {%- endif -%}
+        </h2>
+      {%- elsif template == 'blog' -%}
+        <h2 class="header-title">{{ blog.title }}</h2>
+      {%- else -%}
+        {%- if section.settings.logo_mobile -%}
+          <div class="mobile-logo"><a href="/"><img class="desktop-header-logo-image" src="{{ section.settings.logo_mobile | img_url: 'master' }}" alt="{{ section.settings.logo.alt }}"/></a></div>
+        {%- else -%}
+          <h2 class="header-title">{{ shop.name }}</h2>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  </div>
+  <div class="cell auto">
+    <div class="flex-container align-right" data-header-right>
+      {%- unless template.name == 'index' -%}
+        <a class="header-icon-search display-inline-block" data-toggle="search-box"><em class="sli sli-magnifier"></em></a>
+      {%- endunless -%}
+      <div class="mini-cart display-inline-block">
+        <a class="mini-cart-text display-block" data-toggle="mini-cart-info">
+          <em class="mini-cart-icon sli sli-handbag">
+            <span class="mini-cart-total" data-cart-total>{{ cart.item_count }}</span>
+          </em>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

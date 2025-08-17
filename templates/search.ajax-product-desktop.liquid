@@ -1,0 +1,28 @@
+<!-- /templates/search.ajax-product-desktop.liquid -->
+{% layout none %}
+{%- paginate search.results by 12 -%}
+  <div class="search-box-desktop-ajax-result text-center text-uppercase">
+    {{ search.results_count }} {{ 'general.text.results_with_count' | t }} '{{ search.terms }}'
+  </div>
+  {%- if search.results_count > 0 -%}
+    <div class="search-box-desktop-ajax-product">
+      <div class="grid-x grid-margin-x small-up-2 medium-up-3 large-up-4 xlarge-up-5 xxlarge-up-5 xxxlarge-up-5">
+        {%- for item in search.results -%}
+          {%- if item.object_type == 'product' -%}
+            {%- assign product = item -%}
+            <div class="cell search-box-desktop-ajax-product-item">
+              <div class="product-grid">
+                {%- include 'index-product-item' -%}
+              </div>
+            </div>
+          {%- endif -%}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+  {%- if search.results_count > 12 -%}
+    <div class="search-box-desktop-ajax-more">
+      <a href="/search?type=product&q={{ search.terms }}">{{ 'general.text.see_all_results' | t }} ({{ search.results_count }})</a>
+    </div>
+  {%- endif -%}
+{%- endpaginate -%}

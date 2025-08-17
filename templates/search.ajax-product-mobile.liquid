@@ -1,0 +1,34 @@
+<!-- /templates/search.ajax-product-mobile.liquid -->
+{% layout none %}
+{%- paginate search.results by 10 -%}
+  <div class="search-box-ajax-result text-center text-uppercase">
+    {{ search.results_count }} {{ 'general.text.results_with_count' | t }} '{{ search.terms }}'
+  </div>
+  {%- if search.results_count > 0 -%}
+    <div class="search-box-ajax-product">
+      {%- for item in search.results -%}
+        {%- if item.object_type == 'product' -%}
+          {%- assign product = item -%}
+          <div class="media-object">
+            <div class="media-object-section">
+              <div class="image">
+                <a href="{{ product.url }}">
+                  <img src="{{ product.featured_image | product_img_url: '100x' }}" alt="{{ product.title }}"/>
+                </a>
+              </div>
+            </div>
+            <div class="media-object-section">
+              <p><a href="{{ product.url }}">{{ product.title }}</a></p>
+              <p>{{ 'cart.label.price' | t }}: {{ product.price | money }}</p>
+            </div>
+          </div>
+        {%- endif -%}
+      {% endfor %}
+    </div>
+  {% endif %}
+  {%- if search.results_count > 10 -%}
+    <div class="search-box-ajax-more margin-bottom-1">
+      <a href="/search?type=product&q={{ search.terms }}">{{ 'general.text.see_all_results' | t }} ({{ search.results_count }})</a>
+    </div>
+  {%- endif -%}
+{%- endpaginate -%}

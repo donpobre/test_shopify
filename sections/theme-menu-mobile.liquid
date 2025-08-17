@@ -1,0 +1,36 @@
+<!-- /sections/theme-menu-mobile.liquid -->
+{%- include 'amp-detector' -%}
+{%- unless googleamp-%}
+  {%- include 'theme-menu-mobile' -%}
+{%- else -%}
+  {%- include 'amp-theme-menu-mobile' -%}
+{%- endunless -%}
+{% schema %}
+{
+  "name": "Mobile Menu",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo image"
+    },
+    {
+      "type": "link_list",
+      "id": "link_list",
+      "label": "Menu Links"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email",
+      "default": "Contact@Marco.com"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Telephone",
+      "default": "(+10)1900.123.678"
+    }
+  ]
+}
+{% endschema %}

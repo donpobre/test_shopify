@@ -1,0 +1,133 @@
+<!-- /snippets/theme-header.liquid -->
+<div class="header-wrap width-100" data-header-wrap>
+  <div class="header hide-for-large" data-header data-header-base>
+    <div class="header-container">
+      {%- if template contains 'product' -%}
+        {%- include 'theme-header-mobile-product' -%}
+      {%- elsif template contains 'article' -%}
+        {%- include 'theme-header-mobile-article' -%}
+      {%- else -%}
+        {%- include 'theme-header-mobile' -%}
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+{%- if section.settings.welcome_message -%}
+  <div class="desktop-header-message text-center show-for-large">
+    {{ section.settings.welcome_message }}
+  </div>
+{%- endif -%}
+<div class="top-nav show-for-large">
+  <div class="top-nav-content">
+    <div class="flex-container align-right align-middle width-100">
+      {%- if section.settings.navigation != blank and linklists[section.settings.navigation] != empty -%}
+        <ul class="dropdown menu top-menu align-middle" data-hover-delay="0" data-closing-time="0" data-dropdown-menu>
+          {%- for link in linklists[section.settings.navigation].links -%}
+            <li class="top-nav-root">
+              <a href="{{ link.url }}" class="top-nav-root-link">{{ link.title }}</a>
+              {% if link.links != blank %}
+                <ul class="menu vertical submenu is-dropdown-submenu top-menu-child">
+                  {%- assign child_links = link.links -%}
+                  {%- include 'menu-child' -%}
+                </ul>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+      <div class="top-nav-root">
+        {%- if customer -%}
+          <a href="/account" class="top-nav-root-link">{{ 'customer.account.title' | t }}</a>
+        {%- else -%}
+          <a href="/account/login" class="top-nav-root-link">{{ 'customer.login.title' | t }}</a>
+          <span class="top-nav-or">{{ 'general.text.or' | t }}</span>
+          <a href="/account/register" class="top-nav-root-link">{{ 'customer.register.title' | t }}</a>
+        {%- endif -%}
+      </div>
+      <div class="top-nav-currency flex-container align-middle position-relative">
+        <div class="top-nav-currency-title show-for-large">{{ 'layout.navigation.currency' | t }}:</div>
+        <select class="top-nav-currency-dropdown margin-0" data-currency>
+          {%- capture codes -%}
+            ,USD,EUR,GBP,CAD,ARS,AUD,BBD,BDT,BSD,BHD,BRL,BOB,BND,BGN,MMK,KYD,CLP,CNY,COP,CRC,HRK,CZK,DKK,DOP,XCD,EGP,XPF,FJD,GHS,GTQ,GYD,GEL,HKD,HUF,ISK,INR,IDR,NIS,JMD,JPY,JOD,KZT,KES,KWD,LVL,LTL,MXN,MYR,MUR,MDL,MAD,MNT,MZN,ANG,NZD,NGN,NOK,OMR,PKR,PYG,PEN,PHP,PLN,QAR,RON,RUB,SAR,RSD,SCR,SGD,SYP,ZAR,KRW,LKR,SEK,CHF,TWD,THB,TZS,TTD,TRY,UAH,AED,UYU,VEB,VND,ZMK,
+          {%- endcapture -%}
+          {%- assign supported_codes = settings.supported_currencies | split: ' ' -%}
+          <option value="{{ shop.currency }}" selected="selected">{{ shop.currency }}</option>
+          {%- for code in supported_codes -%}
+            {%- if code != shop.currency and codes contains code -%}
+              <option value="{{ code }}">{{ code }}</option>
+            {%- endif -%}
+          {%- endfor -%}
+        </select> 
+      </div>
+    </div>
+  </div>
+</div>
+<div class="desktop-header show-for-large" {% if section.settings.header_sticky %}data-sticky='{"stickTo": "body", "stickyClass": "sticky", "responsive": {"800": {"disable": true}}}'{% endif %}>
+  <div class="grid-container fluid">
+    <div class="desktop-header-content">
+      <div class="grid-x grid-margin-x align-middle">
+        <div class="cell shrink">
+          <div class="desktop-header-logo">
+            {%- capture logo -%}
+              {%- if section.settings.logo -%}
+                {%- assign img_url = section.settings.logo | img_url: 'master' -%}
+                {%- assign logo_alt = section.settings.logo.alt | default: shop.name -%}
+                <a href="/" itemprop="url">
+                  <img src="{{ img_url }}" alt="{{ logo_alt }}" />
+                </a>
+              {%- else -%}
+                <a href="/" itemprop="url">{{ shop.name }}</a>
+              {%- endif -%}
+            {%- endcapture -%}
+            {%- if template.name == 'index' -%}
+              <h1 itemscope itemtype="http://schema.org/Organization" class="margin-0">
+                {{ logo }}
+              </h1>
+            {%- else -%}
+              <div itemscope itemtype="http://schema.org/Organization">
+                {{ logo }}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+        <div class="cell auto">
+          <div class="flex-container width-100 align-center">
+            <div>
+              {%- if section.settings.link_list != empty and linklists[section.settings.link_list] != empty -%}
+                {%- include 'theme-header-menu', config: section.settings, blocks: section.blocks, menu: linklists[section.settings.link_list] -%}
+              {%- endif -%}
+            </div>
+          </div>
+        </div>
+        <div class="cell shrink">
+          <div class="flex-container align-middle">
+            <div class="desktop-header-user-nav desktop-header-search">
+              <a class="icon-search display-block" data-toggle="search-box-desktop"><em class="sli sli-magnifier"></em></a>
+            </div>
+            <div class="desktop-header-user-nav desktop-header-compare" data-compare-link-block>
+              <a href="/pages/compare" class="display-block">
+                <em class="sli sli-refresh">
+                  <span class="header-counter-pill" data-compare-count></span>
+                </em>
+              </a>
+            </div>
+            <div class="desktop-header-user-nav desktop-header-wishlist" data-wishlist-link-block>
+              <a href="/pages/wish-list" class="display-block">
+                <em class="sli sli-heart">
+                  <span class="header-counter-pill" data-wishlist-count></span>
+                </em>
+              </a>
+            </div>
+            <div class="desktop-header-user-nav desktop-header-mini-cart mini-cart">
+              <a class="display-block" data-toggle="mini-cart-desktop-info">
+                <em class="mini-cart-icon sli sli-handbag">
+                  <span class="header-counter-pill mini-cart-total" data-cart-total>{{ cart.item_count }}</span>
+                </em>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

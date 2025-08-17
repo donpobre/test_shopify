@@ -1,0 +1,41 @@
+<!-- /snippets/cart-mini.liquid -->
+<div id="mini-cart-info" class="layout-mobile-overlap reveal full" data-reveal data-overlap-mobile data-mini-cart data-v-offset="0" data-h-offset="0" data-overlay="false" data-animation-in="fade-in fast" data-animation-out="fade-out fast" data-enable-padding="true">
+  {%- assign map_to = 'mini-cart-info' -%}
+  {%- capture mobile_header_left -%}
+    <a class="header-button-back display-inline-block" data-close="mini-cart-info">
+      <svg class="svg-icon">
+        <use xlink:href="#icon-arrow-left" />
+      </svg>
+    </a>
+  {%- endcapture -%}
+  {%- capture mobile_header_content -%}
+    <h3 class="header-title">{{ 'general.text.shopping_bag' | t }}</h3>
+  {%- endcapture -%}
+  {%- capture mobile_header_right -%}
+    <a class="header-icon-search display-inline-block" data-toggle="search-box"><em class="sli sli-magnifier"></em></a>
+    <div class="mini-cart display-inline-block">
+      <a class="mini-cart-text display-block" data-toggle="mini-cart-info">
+        <em class="mini-cart-icon sli sli-handbag">
+          <span class="mini-cart-total" data-cart-total>{{ cart.item_count }}</span>
+        </em>
+      </a>
+    </div>
+  {%- endcapture -%}
+  {%- include 'header-mobile-overlap' -%}
+  <div class="mini-cart-info" data-mini-cart-info>
+    <div class="loading text-center">
+      <img src="{{'ajax-loader.gif' | asset_url}}" alt="loading" />
+    </div>
+  </div>
+</div>
+<div id="mini-cart-desktop-info" class="off-canvas {% if settings.general_page_direction == 'ltr' %}position-right{% else %}position-left{% endif %}" data-off-canvas data-overlap-desktop>
+  <div class="mini-cart-info">
+    <a class="mini-cart-close display-block" data-close="mini-cart-desktop-info"><em class="sli sli-close"></em></a>
+    <div data-mini-cart-info>
+      <div class="loading text-center">
+        <img src="{{'ajax-loader.gif' | asset_url}}" alt="loading" />
+      </div>
+    </div>
+  </div>
+</div>
+{%- include 'cart-mini-template' -%}

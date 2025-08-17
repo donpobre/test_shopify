@@ -1,0 +1,21 @@
+<!-- /snippets/compare-notification.liquid -->
+<script type="text/x-tmpl" id="compare-notification" data-compare-notification class="hide">
+  <!-- /snippets/compare-notification.liquid -->
+  <div class="notification">
+    <h3 class="notification-title"><a href="/pages/compare">{{ 'compare.notification.title' | t }}</a></h3>
+    <div class="media-object margin-0">
+      <div class="media-object-section">
+        <div class="thumbnail">
+          <a href="{% raw %}{%=o.url%}{% endraw %}" class="product-image">
+            <img src="{% raw %}{%=o.featured_image%}{% endraw %}" alt="{% raw %}{%=o.title%}{% endraw %}" class="notification-image" />
+          </a>
+        </div>
+      </div>
+      <div class="media-object-section">
+        <h4 class="notification-product-title"><a href="{% raw %}{%=o.url%}{% endraw %}">{% raw %}{%=o.title%}{% endraw %}</a></h4>
+        <div class="notification-product-price">{% raw %}{%=o.price%}{% endraw %}</div>
+        <div class="notification-link"><a href="/pages/compare">{{ 'compare.notification.link' | t }}</a></div>
+      </div>
+    </div>
+  </div>
+</script>
